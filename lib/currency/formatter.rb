@@ -228,7 +228,11 @@ class Currency::Formatter
     fraction = x[currency.format_right .. -1]
     
     # Round the fraction to the supplied number of decimal places
+    prev_fraction = fraction
     fraction = (fraction.to_f / currency.scale).round(@decimals).to_s[2..-1]
+    if fraction =~ /^0/ and prev_fraction =~ /^9/
+      whole = (whole.to_i + 1).to_s
+    end 
     # raise "decimals: #{@decimals}, scale_exp: #{currency.scale_exp}, x is: #{x.inspect}, currency.scale_exp is #{currency.scale_exp.inspect}, fraction: #{fraction.inspect}"
     while ( fraction.length < @decimals )
       fraction = fraction + "0" 
